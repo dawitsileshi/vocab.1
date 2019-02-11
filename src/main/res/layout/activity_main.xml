@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?attr/backgroundColor"
+        app:itemTextColor="?attr/textColor"
+        app:itemIconTint="?attr/iconColor"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
+        <!--app:headerLayout="@layout/nav_header_main"-->
+        <!--app:menu="@menu/activity_main_drawer"-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <LinearLayout
+                android:id="@+id/linearLayout_customNavigation_headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="176dp"
+                android:background="?colorPrimary"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_customNavigation_verticalLine"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toTopOf="@id/constraintLayout_navView_home_container"
+                app:layout_constraintBottom_toBottomOf="@id/constraintLayout_navView_setting_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+                <!--android:background="?attr/switchThumb"-->
+            <!--android:layout_marginTop="18dp"-->
+
+            <LinearLayout
+                android:id="@+id/linearLayout_customNavigation_horizontalLine"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout_navView_quiz_container"
+                app:layout_constraintBottom_toTopOf="@id/constraintLayout_navView_rating_container"
+                app:layout_constraintStart_toStartOf="@id/constraintLayout_navView_setting_container"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayout_navView_quiz_container"/>
+
+                <!--android:background="?attr/switchThumb"-->
+
+            <ImageView
+                android:id="@+id/imageView_customNavigation_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher_round"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/linearLayout_customNavigation_headerLayout"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout_customNavigation_headerLayout"
+                android:contentDescription="TODO" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_navView_home_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="?selectableItemBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/linearLayout_customNavigation_verticalLine"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_icon"
+                app:layout_constraintBottom_toTopOf="@id/linearLayout_customNavigation_horizontalLine">
+
+            <ImageView
+                android:id="@+id/imageView_customNavigation_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/quiz_icon"
+                android:tint="?attr/iconColor"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_home" />
+            <TextView
+                android:id="@+id/textView_customNavigation_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home"
+                android:textSize="20sp"
+                android:textColor="?attr/textColor"
+                app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_home"
+                app:layout_constraintStart_toStartOf="@id/imageView_customNavigation_home"
+                app:layout_constraintEnd_toEndOf="@id/imageView_customNavigation_home" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_navView_quiz_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="?selectableItemBackground"
+                app:layout_constraintStart_toEndOf="@id/linearLayout_customNavigation_verticalLine"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_icon"
+                app:layout_constraintBottom_toTopOf="@id/linearLayout_customNavigation_horizontalLine"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView_customNavigation_quiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/setting_icon"
+                android:tint="?attr/iconColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_quiz_24dp" />
+            <TextView
+                android:id="@+id/textView_customNavigation_quiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quiz"
+                android:textSize="20sp"
+                android:textColor="?attr/textColor"
+                app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_quiz"
+                app:layout_constraintStart_toStartOf="@id/imageView_customNavigation_quiz"
+                app:layout_constraintEnd_toEndOf="@id/imageView_customNavigation_quiz" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_navView_setting_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?selectableItemBackground"
+                app:layout_constraintEnd_toStartOf="@id/linearLayout_customNavigation_verticalLine"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout_customNavigation_horizontalLine">
+
+                <ImageView
+                    android:id="@+id/imageView_customNavigation_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/rating_icon"
+                    android:tint="?attr/iconColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/ic_settings_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textView_customNavigation_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings"
+                    android:textColor="?attr/textColor"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@id/imageView_customNavigation_setting"
+                    app:layout_constraintStart_toStartOf="@id/imageView_customNavigation_setting"
+                    app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_setting" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_navView_rating_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                app:layout_constraintStart_toEndOf="@id/linearLayout_customNavigation_verticalLine"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?selectableItemBackground"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout_customNavigation_horizontalLine"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView_customNavigation_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/power_off_icon"
+                android:tint="?attr/iconColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/ic_thumb_up_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textView_customNavigation_ratings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rating"
+                    android:textColor="?attr/textColor"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@id/imageView_customNavigation_rating"
+                    app:layout_constraintStart_toStartOf="@id/imageView_customNavigation_rating"
+                    app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_rating" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_navView_exit_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackground"
+                app:layout_constraintBottom_toTopOf="@id/textView_customNavigation_appName"
+                app:layout_constraintEnd_toEndOf="@id/textView_customNavigation_appName"
+                app:layout_constraintStart_toStartOf="@id/textView_customNavigation_appName"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout_customNavigation_verticalLine">
+
+                <ImageView
+                    android:id="@+id/imageView_customNavigation_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/power_off_icon"
+                    android:tint="?attr/iconColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/ic_power_settings_new_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textView_customNavigation_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/exit"
+                    android:textColor="?attr/textColor"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@id/imageView_customNavigation_exit"
+                    app:layout_constraintStart_toStartOf="@id/imageView_customNavigation_exit"
+                    app:layout_constraintTop_toBottomOf="@id/imageView_customNavigation_exit" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView_customNavigation_appName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vocabulary_v1_0"
+                android:textColor="?attr/tintColor"
+                android:textSize="20sp"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout_navView_exit_container"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.daveart.vocabularyapp">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- android:name=".notification.NotificationChannelsClass" -->
+    <application
+        android:name=".notification.NotificationChannelsClass"
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.SettingActivity"
+            android:label="@string/settings" />
+
+        <receiver android:name=".notification.AlarmNotificationReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".services.HomeScreenWidget">
+            <intent-filter>
+
+                <!-- <action android:name="AUTO_UPDATE"/> -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+        <receiver android:name=".services.FloatingWidgetReceiver"/>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+                <!--<action android:name="android.intent.action.QUICKBOOT_POWERON" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+        <activity
+            android:name=".activities.AnotherActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/detailAnimation" />
+        <activity
+            android:name=".activities.QuizStartPage"
+            android:label="Start your Quiz"></activity>
+        <!--<activity-->
+            <!--android:name=".quiz.WordQuestions"-->
+            <!--android:configChanges="screenSize|orientation" />-->
+        <!--<activity-->
+            <!--android:name=".quiz.MeaningQuestions"-->
+            <!--android:configChanges="orientation|screenSize" />-->
+        <activity
+            android:name=".activities.DetailActivity" />
+        <!--android:theme="@style/MyFloatingWindow"-->
+        <activity android:name=".activities.WidgetConfigActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".utils.FloatingViewService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.StackedWidgetView"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <!-- <service android:name=".services.StackedWidgetView" -->
+        <!-- android:permission="android.permission.BIND_REMOTEVIEWS"/> -->
+        <!-- <service android:name=".services.ClipBoardService" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="false"/> -->
+
+    </application>
+
+</manifest>

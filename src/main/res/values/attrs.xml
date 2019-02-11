@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ds">
+        <attr name="backgroundColor" format="color"/>
+        <attr name="cardBackground" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="titles" format="color"/>
+        <attr name="tintColor" format="color"/>
+        <attr name="buttonColor" format="color"/>
+        <attr name="switchThumb" format="color"/>
+        <attr name="switchTrack" format="color"/>
+        <attr name="iconColor" format="color"/>
+        <attr name="correctAnswer" format="color"/>
+        <attr name="customTabIndicator" format="color"/>
+    </declare-styleable>
+
+    <!--Dual ProgressBar custom attributes-->
+    <declare-styleable name="DualProgressView">
+        <attr name="dpv_anim_duration" format="integer"/>
+        <attr name="dpv_outer_color" format="color"/>
+        <attr name="dpv_inner_color" format="color"/>
+        <attr name="dpv_thickness" format="dimension"/>
+        <attr name="dpv_inner_padding" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableLayout">
+        <attr name="el_duration" format="integer" />
+        <attr name="el_expanded" format="boolean" />
+        <attr name="el_parallax" format="float" />
+        <attr name="android:orientation"/>
+    </declare-styleable>
+
+
+</resources>

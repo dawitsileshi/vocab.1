@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/alert_layout"
+    android:minWidth="250dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="?attr/backgroundColor">
+
+    <TextView
+        android:id="@+id/textView_alertLayout_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/insert_a_word"
+        android:textColor="?attr/textColor"
+        android:textSize="20sp"
+        android:padding="8dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout_alertLayout_horizontalLine"
+        app:layout_constraintEnd_toStartOf="@id/linearLayout_alertLayout_verticalLine"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_alertLayout_verticalLine"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@android:color/holo_blue_light"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_alertLayout_title"
+        app:layout_constraintEnd_toStartOf="@id/imageView_alertLayout_exit"
+        app:layout_constraintStart_toEndOf="@id/textView_alertLayout_title"
+        app:layout_constraintTop_toTopOf="@id/textView_alertLayout_title" />
+
+    <ImageView
+        android:id="@+id/imageView_alertLayout_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:tint="?attr/textColor"
+        app:layout_constraintStart_toEndOf="@id/linearLayout_alertLayout_verticalLine"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_alertLayout_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_exit" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_alertLayout_horizontalLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_blue_light"
+        android:layout_margin="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_verticalLine"
+        app:layout_constraintStart_toStartOf="@id/textView_alertLayout_title"
+        app:layout_constraintEnd_toEndOf="@id/imageView_alertLayout_exit"/>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_alertLayout_word_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_horizontalLine">
+
+        <AutoCompleteTextView
+            android:id="@+id/appCompatTextView_alertLayout_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_show_background"
+            android:ems="8"
+            android:inputType="textCapSentences"
+            android:hint="@string/word"
+            android:textColorHint="@android:color/white"
+            android:padding="8dp"
+            android:paddingEnd="18dp"
+            android:paddingStart="8dp"
+            android:textAlignment="center"
+            android:paddingRight="18dp"
+            android:paddingLeft="8dp"
+            android:textColor="@android:color/white"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_alertLayout_search_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignEnd="@id/appCompatTextView_alertLayout_word"
+            android:background="@drawable/circle_background"
+            android:layout_alignRight="@id/appCompatTextView_alertLayout_word"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/imageView_alertLayout_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_search"
+                android:padding="4dp"
+                android:tint="@android:color/white"/>
+
+        </LinearLayout>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView_alertLayout_search"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignEnd="@id/appCompatTextView_alertLayout_word"-->
+            <!--android:background="@drawable/circle_background"-->
+            <!--android:padding="16dp"-->
+            <!--android:tint="@android:color/white"-->
+            <!--app:srcCompat="@drawable/ic_search"-->
+            <!--android:layout_alignRight="@id/appCompatTextView_alertLayout_word" />-->
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_alertLayout"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:maxHeight="200dp"
+        app:layout_constraintTop_toBottomOf="@id/relativeLayout_alertLayout_word_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_alertLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_alertLayout_noData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="?attr/textColor"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.example.daveart.vocabularyapp.custom_views.DualProgressView
+            android:id="@+id/progressBar_alertLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/button_alertLayout_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/save"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/button_show_background"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout_alertLayout" />
+        <!--android:background="@drawable/button_background"-->
+
+    <Button
+        android:id="@+id/button_alertLayout_cache"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cache"
+        android:textColor="@android:color/white"
+        android:layout_margin="8dp"
+        android:background="@drawable/button_show_background"
+        app:layout_constraintBottom_toTopOf="@id/checkBox_alertLayout_delete"
+        app:layout_constraintEnd_toStartOf="@id/button_alertLayout_save"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout_alertLayout"/>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkBox_alertLayout_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_cached_word"
+        android:layout_margin="8dp"
+        android:checked="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/button_alertLayout_save"
+        app:layout_constraintEnd_toEndOf="@id/button_alertLayout_save"
+        app:layout_constraintStart_toStartOf="@id/button_alertLayout_cache"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="14dp"-->
+        <!--android:background="@drawable/circle_background">-->
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" -->
+            <!--app:srcCompat="@drawable/ic_action_action_search"/>-->
+    <!--</LinearLayout>-->
+    <!--<android.support.v7.widget.AppCompatTextView-->
+        <!--android:id="@+id/appCompatTextView_alertLayout_word"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:background="@drawable/button_show_background"-->
+        <!--android:ems="8"-->
+        <!--android:hint="@string/word"-->
+        <!--android:padding="8dp"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColorHint="@android:color/white"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_horizontalLine" />-->
+
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/circle_background"-->
+        <!--android:padding="12dp"-->
+        <!--android:tint="@android:color/white"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/appCompatTextView_alertLayout_word"-->
+        <!--app:layout_constraintStart_toEndOf="@id/appCompatTextView_alertLayout_word"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_horizontalLine"-->
+        <!--app:srcCompat="@drawable/ic_search" />-->
+    <!--<TextView-->
+        <!--android:id="@+id/textView_alertLayout_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/insert_a_word"-->
+        <!--android:textSize="25sp"-->
+        <!--android:textColor="?attr/textColor"-->
+        <!--android:textStyle="bold"-->
+        <!--android:padding="8dp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/linearLayout_alertLayout_line"-->
+        <!--app:layout_constraintTop_toTopOf="parent"/>-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView_alertLayout_exit"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@drawable/ic_cancel"-->
+        <!--android:padding="8dp"-->
+        <!--android:tint="?attr/textColor"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/linearLayout_alertLayout_line"-->
+        <!--android:contentDescription="@string/an_exit_button" />-->
+
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/cardView_alertLayout_word"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:cardElevation="5dp"-->
+        <!--app:cardCornerRadius="20dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintEnd_toStartOf="@id/cardView_alertLayout_search"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_line"-->
+        <!--app:layout_constraintStart_toStartOf="parent">-->
+        <!--&lt;!&ndash;android:id="@+id/editText_alertLayout_word"&ndash;&gt;-->
+
+        <!--<AutoCompleteTextView-->
+            <!--android:id="@+id/editText_alertLayout_word"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="6"-->
+            <!--android:hint="@string/word"-->
+            <!--android:completionThreshold="1"-->
+            <!--android:dropDownWidth="wrap_content"-->
+            <!--android:dropDownHeight="wrap_content"-->
+            <!--android:completionHintView="@layout/font_item"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="?attr/textColor"-->
+            <!--android:inputType="textCapSentences"-->
+            <!--app:layout_constraintEnd_toStartOf="@id/imageView_alertLayout_search"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_line"-->
+            <!--app:layout_constraintStart_toStartOf="parent" />-->
+    <!--</android.support.v7.widget.CardView>-->
+
+    <!--&lt;!&ndash;<android.support.design.widget.TextInputLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/textInputLayout_alertLayout"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:layout_constraintEnd_toStartOf="@id/imageView_alertLayout_search"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginBottom="8dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginTop="8dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_line"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:layout_constraintStart_toStartOf="parent">&ndash;&gt;-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout_alertLayout_line"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="?attr/textColor"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/textView_alertLayout_title"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"/>-->
+
+    <!--&lt;!&ndash;</android.support.design.widget.TextInputLayout>&ndash;&gt;-->
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/cardView_alertLayout_search"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--app:cardCornerRadius="24dp"-->
+        <!--app:cardElevation="4dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/cardView_alertLayout_word"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@id/cardView_alertLayout_word"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/linearLayout_alertLayout_line">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView_alertLayout_search"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:contentDescription="@string/a_search_icon"-->
+            <!--android:tint="?attr/iconColor"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@id/cardView_alertLayout_word"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/linearLayout_alertLayout_line"-->
+            <!--app:srcCompat="@drawable/ic_search" />-->
+    <!--</android.support.v7.widget.CardView>-->
+
+    <!--<android.support.constraint.ConstraintLayout-->
+        <!--android:id="@+id/constraintLayout_alertLayout"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="120dp"-->
+        <!--android:maxHeight="200dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/cardView_alertLayout_word"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent">-->
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recyclerView_alertLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="3dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView_alertLayout_noData"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="18sp"-->
+            <!--android:visibility="gone"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"/>-->
+    <!--</android.support.constraint.ConstraintLayout>-->
+    <!--<FrameLayout-->
+        <!--android:id="@+id/frameLayout_alertLayout"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/editText_alertLayout_word"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent">-->
+
+    <!--</FrameLayout>-->
+
+    <!--<RadioGroup-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!---->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="MultiSelect"/>-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+            <!---->
+    <!--</RadioGroup>-->
+
+    <!--<android.support.v7.widget.AppCompatCheckBox-->
+        <!--android:id="@+id/appCompatCheckBox"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="MultiSelect"-->
+        <!--android:textColor="?textColor"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/button_alertLayout_save"-->
+        <!--app:layout_constraintStart_toStartOf="@id/imageView_alertLayout_cache"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/button_alertLayout_save" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/button_alertLayout_save"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/button_background"-->
+        <!--android:text="@string/save"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/constraintLayout_alertLayout" />-->
+        <!--&lt;!&ndash;android:background="?attr/buttonColor"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="?attr/backgroundColor"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="@string/save"&ndash;&gt;-->
+
+    <!--<Button-->
+        <!--android:id="@+id/button_alertLayout_cache"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="5dp"-->
+        <!--android:background="@drawable/button_background"-->
+        <!--android:text="@string/cache"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--app:layout_constraintEnd_toStartOf="@id/button_alertLayout_save"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/constraintLayout_alertLayout" />-->
+
+    <!--<android.support.v7.widget.AppCompatCheckBox-->
+        <!--android:id="@+id/checkBox_alertLayout_delete"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:checked="true"-->
+        <!--android:text="@string/delete_the_cached_word"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/button_alertLayout_save"-->
+        <!--app:layout_constraintStart_toStartOf="@id/button_alertLayout_cache"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/button_alertLayout_save" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:padding="8dp"-->
+        <!--android:text="@string/insert_a_word"-->
+        <!--android:textColor="@color/darker"-->
+        <!--android:textSize="25sp"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/linearLayout_line"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/imageButton_cancel"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/imageButton_cancel"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:contentDescription="@string/a_cancel_button"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/linearLayout_line"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:padding="8dp"-->
+        <!--app:srcCompat="@drawable/ic_exit"-->
+        <!--android:background="?selectableItemBackground" />-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout_line"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="@color/darker"-->
+        <!--android:layout_marginStart="20dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/textView_title"/>-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/editText_word"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:inputType="text|textCapSentences"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:hint="@string/write_a_word"-->
+        <!--android:textColor="?attr/textColor"-->
+        <!--android:ems="10"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/frameLayout_alertLayout"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/linearLayout_line" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/imageButton_search"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:contentDescription="@string/a_search_button"-->
+        <!--android:padding="8dp"-->
+        <!--android:background="?selectableItemBackground"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/frameLayout_alertLayout"-->
+        <!--app:layout_constraintStart_toEndOf="@id/editText_word"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/linearLayout_line"-->
+        <!--app:srcCompat="@drawable/ic_search" />-->
+
+    <!--<FrameLayout-->
+        <!--android:id="@+id/frameLayout_alertLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="150dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/editText_word"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent">-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/recyclerView_meanings"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="150dp"-->
+        <!--app:layout_constraintHeight_max="200dp"-->
+        <!--android:visibility="visible" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView_alertLayout_noData"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Sorry, no data found."-->
+            <!--android:textSize="25sp"-->
+            <!--android:visibility="gone"-->
+            <!--android:textColor="?attr/textColor"-->
+            <!--android:layout_gravity="center"/>-->
+    <!--</FrameLayout>-->
+
+
+    <!--<Button-->
+        <!--android:id="@+id/button_save"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:text="@string/save"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/frameLayout_alertLayout"-->
+        <!--app:layout_constraintEnd_toEndOf="parent" />-->
+    <!--<TextView-->
+        <!--android:id="@+id/addOrEditTitle"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/insert_a_word"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--android:padding="8dp"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/line"-->
+        <!--app:layout_constraintStart_toStartOf="parent"/>-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/line"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/colorAccent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--app:layout_constraintStart_toStartOf="@id/wordEditText"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/wordEditText"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/wordEditText"/>-->
+
+    <!--<android.support.v7.widget.AppCompatSpinner-->
+        <!--android:id="@+id/wordTypeSpinner"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAlignment="center"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/meaningEditText"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toStartOf="@id/cancel_button"/>-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/wordEditText"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:ems="10"-->
+        <!--android:hint="@string/word"-->
+        <!--android:inputType="text|textCapSentences"-->
+        <!--android:textAlignment="center"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/meaningEditText"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/meaningEditText"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/line" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/meaningEditText"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:ems="10"-->
+        <!--android:hint="@string/meaning"-->
+        <!--android:inputType="text|textAutoComplete"-->
+        <!--android:textAlignment="center"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/wordEditText" />-->
+
+    <!--<com.balysv.materialripple.MaterialRippleLayout-->
+        <!--android:id="@+id/materialRippleLayout"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginEnd="32dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/save_button"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@id/meaningEditText"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/meaningEditText"-->
+        <!--app:mrl_rippleOverlay="true"-->
+        <!--app:mrl_rippleRoundedCorners="4dp">-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:contentDescription="@string/fetch_meaning"-->
+            <!--app:srcCompat="@drawable/ic_cloud_download" />-->
+
+    <!--</com.balysv.materialripple.MaterialRippleLayout>-->
+
+    <!--<ProgressBar-->
+        <!--android:id="@+id/progressBarID"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="32dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:visibility="invisible"-->
+        <!--android:foreground="@color/colorAccent"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/save_button"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@id/meaningEditText"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/meaningEditText" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/save_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:text="@string/save"-->
+        <!--android:background="@drawable/button_background_stroke"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/meaningEditText"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/wordEditText"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/meaningEditText"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/cancel_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:text="@string/cancel"-->
+        <!--android:background="@drawable/button_background_stroke"-->
+
+        <!--app:layout_constraintEnd_toStartOf="@+id/save_button"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/meaningEditText"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="mea"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginEnd="32dp"-->
+    <!--android:layout_marginStart="32dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--app:mrl_rippleOverlay="true"-->
+    <!--app:mrl_rippleRoundedCorners="4dp"-->
+    <!--app:layout_constraintBottom_toBottomOf="@+id/cancel_button"-->
+    <!--app:layout_constraintEnd_toStartOf="@+id/cancel_button"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/meaningEditText"-->

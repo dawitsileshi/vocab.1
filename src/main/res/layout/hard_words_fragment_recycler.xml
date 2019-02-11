@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/hardWordsFragment_recycler"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="vertical"-->
+        <!--android:visibility="gone"-->
+        <!--android:verticalScrollbarPosition="left"-->
+        <!--android:scrollbarStyle="insideInset"-->
+        <!--android:fadeScrollbars="true"/>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:visibility="visible"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="20dp">-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:srcCompat="@drawable/ic_star"-->
+            <!--android:tint="?attr/switchTrack"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:padding="8dp"/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView_noWords_hard_words_fragment_recycler"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textSize="20sp"-->
+        <!--android:textColor="?attr/textColor"-->
+        <!--android:text="No Words Found, You can press the start icon on any word. NB: Frequently missed words from the quiz can be found here also."/>-->
+
+    <!--</LinearLayout>-->
+
+
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/recyclerViewID"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+
+</FrameLayout>

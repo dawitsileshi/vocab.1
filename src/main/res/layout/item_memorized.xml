@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/linearLayout_itemMemorized"
+    android:foreground="?selectableItemBackground"
+    android:weightSum="4"
+    android:gravity="center"
+    android:padding="6dp">
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/appCompatCheckBox_itemMemorized"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight=".5"
+        android:clickable="false"/>
+
+    <TextView
+        android:id="@+id/textView_itemMemorized"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Word"
+        android:layout_weight="3"
+        android:padding="8dp"
+        android:textSize="20sp"/>
+
+
+</LinearLayout>

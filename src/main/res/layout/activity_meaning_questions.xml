@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    tools:context="com.example.daveart.vocabularyapp.quiz.MeaningQuestions">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout_quiz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolBar_quiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--tools:text="Meaning Quiz"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="20sp"/>-->
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/textView_quiz_questionNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="0"
+        android:textSize="50sp"
+        android:textColor="?attr/textColor"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout_quiz"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@id/cardView_quiz_meaningContainer"/>
+
+    <ImageButton
+        android:id="@+id/imageButton_quiz_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/a_pause_button"
+        android:padding="16dp"
+        android:tint="?attr/iconColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout_quiz"
+        app:srcCompat="@drawable/ic_pause_circle_outline_black_24dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_quiz_meaningContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="?attr/cardBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButton_quiz_pause"
+        tools:layout_editor_absoluteY="120dp">
+
+        <TextView
+            android:id="@+id/textView_quiz_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:text="Q: aslfjkadsklfjaslfkasjfadslkfjadslfkadjsflkadsjf dklasfj dsflasj"
+            android:textColor="?attr/textColor" />
+
+    </androidx.cardview.widget.CardView>
+    <ProgressBar
+        android:id="@+id/progressBar_quiz_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="100"
+        android:indeterminate="false"
+        app:layout_constraintTop_toBottomOf="@id/cardView_quiz_meaningContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_quiz_choiceAContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_gravity="center"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:layout_constraintTop_toBottomOf="@id/progressBar_quiz_timer"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/radioButton_quiz_choiceA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:padding="8dp"
+                android:text="A. sldfkjsdlkf"
+                android:textColor="?attr/textColor" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_quiz_choiceBContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_gravity="center"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView_quiz_choiceAContainer">
+
+            <RadioButton
+                android:id="@+id/radioButton_quiz_choiceB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:padding="8dp"
+                android:text="B. sldfkjsdlkf"
+                android:textColor="?attr/textColor" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_quiz_choiceCContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_columnSpan="2"
+            app:layout_gravity="center"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView_quiz_choiceBContainer">
+
+            <RadioButton
+                android:id="@+id/radioButton_quiz_choiceC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:padding="8dp"
+                android:text="C. sldfkjsdlkfjdslfkj"
+                android:textColor="?attr/textColor" />
+
+        </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/button_quiz_next_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="18dp"
+        android:text="@string/next"
+        android:textColor="?attr/textColor"
+        android:background="?attr/buttonColor"
+        app:layout_constraintTop_toBottomOf="@id/cardView_quiz_choiceCContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/quizFragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    tools:context="com.example.daveart.vocabularyapp.quiz.StartPage">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/quizType_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/quizType_toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Start Quiz"-->
+                <!--android:textSize="20sp"-->
+                <!--android:textColor="@android:color/white"/>-->
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/quizFragment_contaier"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_quiz_type"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:textColor="?attr/textColor"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/choose_quiz_type_buttonID"
+        app:layout_constraintStart_toStartOf="@+id/choose_quiz_type_buttonID"
+        app:layout_constraintEnd_toEndOf="@+id/choose_quiz_type_buttonID" />
+
+    <Button
+        android:id="@+id/choose_quiz_type_buttonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/red_button"
+        style="@style/buttonText"
+        android:text="@string/choose"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

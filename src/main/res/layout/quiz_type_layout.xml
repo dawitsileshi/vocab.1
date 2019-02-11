@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="?attr/cardBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundColor">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_quizType"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:background="?attr/iconColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_quizType_quiz_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_quizType"
+            app:layout_constraintBottom_toBottomOf="@id/linearLayout_quizType"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:padding="4dp"
+                android:layout_margin="2dp"
+                android:textStyle="bold"
+                android:textColor="?attr/textColor"
+                android:text="@string/quiz_type" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_quizType_word"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@id/cardView_quizType_meaning"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView_quizType_quiz_type">
+            <TextView
+                android:id="@+id/textView_quizType_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"
+                android:textColor="?attr/textColor"
+                android:text="@string/word"
+                android:padding="8dp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_quizType_meaning"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="5dp"
+            app:cardBackgroundColor="?attr/cardBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView_quizType_quiz_type"
+            app:layout_constraintStart_toEndOf="@id/cardView_quizType_word"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/meaning"
+                android:textSize="20sp"
+                android:layout_margin="8dp"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:textColor="?attr/textColor"
+                android:padding="8dp"/>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
