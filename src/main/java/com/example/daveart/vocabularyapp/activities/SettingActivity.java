@@ -349,25 +349,23 @@ public class SettingActivity extends AppCompatActivity implements AdapterView
                 if(isChecked){
 
                     notificationState = true;
-                    TransitionManager.beginDelayedTransition(wholeConstraint);
 
-                    constraintSetOld.applyTo(wholeConstraint);
-                    altLayout = false;
-//                    if(!altLayout) {
-//                    } else {
-//                    }
+//                    intervalConstraint.setVisibility(View.VISIBLE);
+//                    intervalConstraint.setAlpha(1f);
+//                    constraintSetNew.applyTo(wholeConstraint);
 //                    itemSelected = (String) intervalSpinner.getSelectedItem();
 //                    Log.i("Selected interval", itemSelected);
-//                    notificationSwitch(View.VISIBLE, true,
-//                            R.drawable.ic_notifications_active, 1000, 1);
+                    notificationSwitch(View.VISIBLE, true,
+                            R.drawable.ic_notifications_active, 1000, 1);
 
                 }else{
 
-                    constraintSetNew.applyTo(wholeConstraint);
+                    intervalConstraint.setVisibility(View.GONE);
+//                    constraintSetOld.applyTo(wholeConstraint);
                     altLayout = true;
                     notificationState = false;
                     itemSelected = null;
-//                    notificationSwitch(View.GONE, false, R.drawable.ic_notifications, 0, 0);
+                    notificationSwitch(View.GONE, false, R.drawable.ic_notifications, 0, 0);
 
                 }
 
@@ -388,7 +386,6 @@ public class SettingActivity extends AppCompatActivity implements AdapterView
                 }
                 recreate();
 
-
                 break;
 
             case R.id.floatingWidgetSwitch:
@@ -407,9 +404,10 @@ public class SettingActivity extends AppCompatActivity implements AdapterView
 
     public void notificationSwitch(int visibility, boolean checked, int image, int duration, int alphaValue){
 
-        intervalConstraint.animate().alpha(alphaValue).setDuration(duration);
+        TransitionManager.beginDelayedTransition(wholeConstraint);
+//        intervalConstraint.animate().alpha(alphaValue).setDuration(duration);
         intervalConstraint.setVisibility(visibility);
-        changeImage(notificationImage, image);
+//        changeImage(notificationImage, image);
         preferenceUtil.saveBooleanValue(checked, preferenceUtil.PREFERENCE_NOTIFICATION_STATE);
 
     }

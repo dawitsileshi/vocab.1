@@ -17,12 +17,14 @@ import com.example.daveart.vocabularyapp.dialog_fragments.DeleteConfirmation;
 import com.example.daveart.vocabularyapp.dialog_fragments.ShowWordDialogFragment;
 import com.example.daveart.vocabularyapp.interfaces.RecyclerViewItemsClickLongClickListener;
 import com.example.daveart.vocabularyapp.model.WordsViewType;
+import com.example.daveart.vocabularyapp.utils.RecyclerDiffUtil;
 import com.example.daveart.vocabularyapp.utils.RecyclerItemAnimator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.fragment.app.Fragment;
 
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
@@ -76,6 +78,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
     private TextToSpeech textToSpeech;
     private boolean ttsInitialized;
 
+    private ArrayList<Object> oldSavedWords;
 
     private RecyclerView wordFragment_recycler_id;
     private TextView textView_noWord;
@@ -135,6 +138,8 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
             savedWords = dataSource.wordsViewTypes();
         }
 
+        oldSavedWords = savedWords;
+
 //        fab_setting.setOnClickListener(this);
         fab_setting.setOnTouchListener(this);
         fab_add.setOnClickListener(this);
@@ -167,6 +172,8 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 
                 if(snackbar != null) {
                     snackbar.dismiss();
+                    //TODO: the data is not being deleted from the database sometimes, even though
+                    // the method below is executing
                     dataSource.removeItemById(clickedItemId, ItemTables.TABLE_NAME, ItemTables.COLUMN_ID);
                 }
 
@@ -266,6 +273,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 
         itemsToDelete = new ArrayList<>();
         words = dataSource.getAllWords();
+
 
     }
 
@@ -574,9 +582,9 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
                     recyclerViewAdapter.notifyItemInserted(1);
                 } else {
                     savedWords.add(0, savedWord);
+//                    updateList(savedWords);
                     recyclerViewAdapter.notifyItemInserted(0);
                 }
-//                recyclerViewAdapter.notifyItemInserted(position);
 
             }else {
 
@@ -601,6 +609,18 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
         }
 
         return id != -1;
+
+    }
+
+    // TODO: not fast in updating the adapter and also creates some item duplications
+    private void updateList(ArrayList<Object> savedWords) {
+
+        RecyclerDiffUtil recyclerDiffUtil = new RecyclerDiffUtil(oldSavedWords, savedWords);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(recyclerDiffUtil);
+
+        oldSavedWords.addAll(savedWords);
+        diffResult.dispatchUpdatesTo(recyclerViewAdapter);
+
 
     }
 

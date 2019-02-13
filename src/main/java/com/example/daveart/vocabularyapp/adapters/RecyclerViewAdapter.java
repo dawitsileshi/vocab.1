@@ -354,7 +354,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<BaseViewHolder>
         return objectList.get(position);
     }
 
-    public void insertData(List<Object> list) {
+    public void insertData(ArrayList<Object> list) {
         RecyclerDiffUtil recyclerDiffUtil = new RecyclerDiffUtil(objectList, list);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(recyclerDiffUtil);
         objectList.clear();

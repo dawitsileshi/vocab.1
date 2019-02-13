@@ -159,4 +159,8 @@
     <string name="sure">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="words_that_rhyme_with">Words that rhyme with</string>
+    <string name="words_that_are_strongly_associated_with">Words that are strongly associated with</string>
+    <string name="words_that_are_spelled_similarly_to">Words that are spelled similarly to</string>
+    <string name="words_that_sound_like">Words that sound like</string>
 </resources>

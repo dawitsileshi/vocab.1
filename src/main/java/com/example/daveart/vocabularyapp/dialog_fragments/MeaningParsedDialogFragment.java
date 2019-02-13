@@ -202,14 +202,14 @@ public class MeaningParsedDialogFragment extends DialogFragment implements View.
 
         suggestionWords = dataSource.getAllWords();
 
-        if (getArguments().getStringArrayList(ARRAYLIST_SENT) != null) {
+//        if (getArguments().getStringArrayList(ARRAYLIST_SENT) != null) {
 
 //            suggestionWords = getArguments().getStringArrayList(ARRAYLIST_SENT);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout
                     .simple_dropdown_item_1line, suggestionWords);
             editText_word.setAdapter(adapter);
 
-        }
+//        }
 
         if(getArguments().getBoolean(CONNECTION_FLAG_SENT)) {
 

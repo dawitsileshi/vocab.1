@@ -1,5 +1,6 @@
 package com.example.daveart.vocabularyapp.dialog_fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,7 @@ import androidx.annotation.Nullable;
 
 public class DeleteConfirmation extends BottomSheetDialogFragment {
 
-    private interface HandlingConfirmationClicks{
+    public interface HandlingConfirmationClicks{
 
         void onYesClicked();
         void onNoClidked();
@@ -34,19 +35,21 @@ public class DeleteConfirmation extends BottomSheetDialogFragment {
         textView_no = rootView.findViewById(R.id.textView_layout_delete_confirmation_no);
         textView_yes = rootView.findViewById(R.id.textView_layout_delete_confirmation_yes);
 
-        textView_no.setOnClickListener(v -> {
+        textView_no.setOnClickListener(v -> handlingConfirmationClicks.onNoClidked());
 
-
-
-        });
-
-        textView_yes.setOnClickListener(v -> {
-
-
-
-        });
+        textView_yes.setOnClickListener(v -> handlingConfirmationClicks.onYesClicked());
 
         return rootView;
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            handlingConfirmationClicks = (HandlingConfirmationClicks) getTargetFragment();
+        }catch(ClassCastException c) {
+            throw new ClassCastException(context.toString() + " must implement all the methods");
+        }
     }
 }

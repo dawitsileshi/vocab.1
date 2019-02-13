@@ -1,5 +1,6 @@
 package com.example.daveart.vocabularyapp.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.DiffUtil;
@@ -7,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerDiffUtil extends DiffUtil.Callback {
 
-    private List<Object> oldList;
-    private List<Object> newList;
+    private ArrayList<Object> oldList;
+    private ArrayList<Object> newList;
 
-    public RecyclerDiffUtil(List<Object> oldList, List<Object> newList) {
+    public RecyclerDiffUtil(ArrayList<Object> oldList, ArrayList<Object> newList) {
 
         this.oldList = oldList;
         this.newList = newList;

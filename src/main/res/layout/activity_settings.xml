@@ -136,6 +136,7 @@
                         android:layout_height="match_parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/intervalConstraint"
                         app:layout_constraintTop_toBottomOf="@id/nightModeConstraint">
 
                         <TextView
@@ -217,7 +218,7 @@
                  <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/intervalConstraint"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/notificationConstraint"
                         app:layout_constraintBottom_toTopOf="@id/fontConstraint">
 
@@ -532,6 +533,7 @@
                     android:id="@+id/selfDeletionConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/sortConstraint">

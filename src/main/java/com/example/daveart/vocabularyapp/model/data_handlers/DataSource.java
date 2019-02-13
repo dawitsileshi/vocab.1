@@ -572,7 +572,9 @@ public class DataSource {
 
     public void removeItemById(long id, String tableName, String column) {
 
-        sqLiteDatabase.delete(tableName, column + " = " + id, null);
+        long result = sqLiteDatabase.delete(tableName, column + " = " + id, null);
+
+        Log.i("Delete id", String.valueOf(result));
 
     }
 
