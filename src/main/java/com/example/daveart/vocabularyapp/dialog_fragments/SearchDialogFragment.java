@@ -33,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
@@ -62,7 +61,7 @@ import java.util.ArrayList;
 import android.util.Log;
 
 
-public class MeaningParsedDialogFragment extends DialogFragment implements View.OnClickListener,
+public class SearchDialogFragment extends DialogFragment implements View.OnClickListener,
         NetworkCheckInterface {
 
     private ArrayList<Object> meaningParsedList;
@@ -107,17 +106,17 @@ public class MeaningParsedDialogFragment extends DialogFragment implements View.
 
     private MeaningParsedListener meaningParsedListener;
 
-    public MeaningParsedDialogFragment newInstance(String word, int adapterPosition,
-                                                   ArrayList<String> strings, boolean startConnecting, long id) {
-        MeaningParsedDialogFragment meaningParsedDialogFragment = new MeaningParsedDialogFragment();
+    public SearchDialogFragment newInstance(String word, int adapterPosition,
+                                            ArrayList<String> strings, boolean startConnecting, long id) {
+        SearchDialogFragment searchDialogFragment = new SearchDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(WORD_SENT, word);
         bundle.putInt(POSITION_SENT, adapterPosition);
         bundle.putStringArrayList(ARRAYLIST_SENT, strings);
         bundle.putBoolean(CONNECTION_FLAG_SENT, startConnecting);
         bundle.putLong(ID_SENT, id);
-        meaningParsedDialogFragment.setArguments(bundle);
-        return meaningParsedDialogFragment;
+        searchDialogFragment.setArguments(bundle);
+        return searchDialogFragment;
     }
 
     @Nullable
@@ -271,7 +270,7 @@ public class MeaningParsedDialogFragment extends DialogFragment implements View.
 //
 ////                        imageButton_search.clearAnimation();
 //                        dualProgressView.setVisibility(View.GONE);
-//                        Log.e(MeaningParsedDialogFragment.class.getName(), "Unable to parse json", e);
+//                        Log.e(SearchDialogFragment.class.getName(), "Unable to parse json", e);
 //
 //                    }
 //                }
@@ -283,7 +282,7 @@ public class MeaningParsedDialogFragment extends DialogFragment implements View.
 ////                    imageButton_search.clearAnimation();
 //                    dualProgressView.setVisibility(View.GONE);
 //                    isErrorConnecting = true;
-//                    Log.e(MeaningParsedDialogFragment.class.getName(), "Unable to parse json1" +
+//                    Log.e(SearchDialogFragment.class.getName(), "Unable to parse json1" +
 //                            error.toString());
 //
 //                }
@@ -550,7 +549,7 @@ public class MeaningParsedDialogFragment extends DialogFragment implements View.
 //            dualProgressView.setVisibility(View.GONE);
 //            imageButton_search.setImageResource(R.drawable.ic_search);
 
-            Log.e(MeaningParsedDialogFragment.class.getName(), "Unable to parse json", e);
+            Log.e(SearchDialogFragment.class.getName(), "Unable to parse json", e);
 
         }
     }
@@ -564,7 +563,7 @@ public class MeaningParsedDialogFragment extends DialogFragment implements View.
 //        dualProgressView.setVisibility(View.GONE);
 //        imageButton_search.setImageResource(R.drawable.ic_search);
         isErrorConnecting = true;
-        Log.e(MeaningParsedDialogFragment.class.getName(), "Unable to parse json1" +
+        Log.e(SearchDialogFragment.class.getName(), "Unable to parse json1" +
                 volleyError.toString());
 
     }
