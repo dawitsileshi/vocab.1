@@ -12,10 +12,16 @@ import androidx.annotation.Nullable;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.example.daveart.vocabularyapp.activities.RelatedWordsActivity;
 import com.example.daveart.vocabularyapp.adapters.RecyclerViewAdapter;
-import com.example.daveart.vocabularyapp.dialog_fragments.DeleteConfirmation;
+import com.example.daveart.vocabularyapp.bottom_sheets.DeleteConfirmationBottomSheet;
+import com.example.daveart.vocabularyapp.bottom_sheets.DeletedItemsBottomSheet;
+import com.example.daveart.vocabularyapp.bottom_sheets.RelatedWordsBottomSheet;
+import com.example.daveart.vocabularyapp.dialog_fragments.SearchDialogFragment;
 import com.example.daveart.vocabularyapp.dialog_fragments.ShowWordDialogFragment;
+import com.example.daveart.vocabularyapp.interfaces.DataMuseApi;
 import com.example.daveart.vocabularyapp.interfaces.RecyclerViewItemsClickLongClickListener;
+import com.example.daveart.vocabularyapp.model.RelatedWords;
 import com.example.daveart.vocabularyapp.model.WordsViewType;
 import com.example.daveart.vocabularyapp.utils.RecyclerDiffUtil;
 import com.example.daveart.vocabularyapp.utils.RecyclerItemAnimator;
@@ -28,10 +34,13 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.speech.tts.TextToSpeech;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
@@ -54,8 +63,7 @@ import android.widget.Toast;
 import com.example.daveart.vocabularyapp.R;
 import com.example.daveart.vocabularyapp.model.data_handlers.DataSource;
 import com.example.daveart.vocabularyapp.model.ItemTables;
-import com.example.daveart.vocabularyapp.dialog_fragments.LongClickBottomSheet;
-import com.example.daveart.vocabularyapp.dialog_fragments.MeaningParsedDialogFragment;
+import com.example.daveart.vocabularyapp.bottom_sheets.LongClickBottomSheet;
 import com.example.daveart.vocabularyapp.model.SavedWord;
 import com.example.daveart.vocabularyapp.utils.AnimationsUtil;
 import com.example.daveart.vocabularyapp.utils.ExceptionUtil;
@@ -72,8 +80,8 @@ import java.util.Locale;
 
 public class WordsFragment extends Fragment implements LongClickBottomSheet
         .OnButtonClickedListener, View.OnClickListener, View.OnTouchListener, TextToSpeech
-        .OnInitListener, ShowWordDialogFragment.OnShareClicked, DeleteConfirmation
-        .HandlingConfirmationClicks {
+        .OnInitListener, ShowWordDialogFragment.OnShareClicked, DeleteConfirmationBottomSheet
+        .HandlingConfirmationClicks, RelatedWordsBottomSheet.OnButtonsClicked {
 
     private TextToSpeech textToSpeech;
     private boolean ttsInitialized;
@@ -99,17 +107,17 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
     private AnimationsUtil animationsUtil;
     private PreferenceUtil preferenceUtil;
 
-    private ArrayList<Object> savedWords;
-    private List<Long> itemsToDelete;
+    private ArrayList<Object> items, originalItems;
+    private List<Integer> itemsToDelete;
     private ArrayList<String> words;
-    private int sortSelectedPosition, clickedItemPosition;
+    private int sortSelectedPosition, clickedItemPosition, numberOfDeletedItems = 0;
     public static float sAnimatorScale = 1;
     private long clickedItemId;
     private boolean restored = false;
 
 //    private CustomDialogFragment customDialogFragment;
-    private MeaningParsedDialogFragment meaningParsedDialogFragment;
-    private DeleteConfirmation deleteConfirmation;
+    private SearchDialogFragment searchDialogFragment;
+    private DeleteConfirmationBottomSheet deleteConfirmation;
     private LongClickBottomSheet longClickBottomSheet;
     private SavedWord longClickedObject;
     private Snackbar snackbar;
@@ -118,11 +126,12 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
         recyclerViewAdapter = new RecyclerViewAdapter();
     }
 
+    // TODO: exceptions when restoring words are not implemented yet
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.words_fragment, container, false);
+        rootView = inflater.inflate(R.layout.recycler_words_fragment, container, false);
         setHasOptionsMenu(true);
 
         creatingObjects();
@@ -133,52 +142,54 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
         sortSelectedPosition = preferenceUtil.retrieveInteger(preferenceUtil
                 .PREFERENCE_SORT_POSITION, -1);
         if(sortSelectedPosition == 1) {
-            savedWords = dataSource.savedWords(ItemTables.TABLE_NAME, sortSelectedPosition);
+            items = dataSource.savedWords(ItemTables.TABLE_NAME, sortSelectedPosition);
+            originalItems = dataSource.savedWords(ItemTables.TABLE_NAME, sortSelectedPosition);
         }else {
-            savedWords = dataSource.wordsViewTypes();
+            items = dataSource.wordsViewTypes();
+            originalItems = dataSource.wordsViewTypes();
         }
 
-        oldSavedWords = savedWords;
+        oldSavedWords = items;
 
-//        fab_setting.setOnClickListener(this);
-        fab_setting.setOnTouchListener(this);
+        fab_setting.setOnClickListener(this);
+//        fab_setting.setOnTouchListener(this);
         fab_add.setOnClickListener(this);
 //
 //
-//                meaningParsedDialogFragment = new MeaningParsedDialogFragment().newInstance(null, 0, words, false, -1);
+//                searchDialogFragment = new SearchDialogFragment().newInstance(null, 0, words, false, -1);
 //                assert getFragmentManager() != null;
-//                meaningParsedDialogFragment.show(getFragmentManager(), "word_fragment");
+//                searchDialogFragment.show(getFragmentManager(), "word_fragment");
 //                switchFAB(false);
 
         checkIfDataExists();
 
         addingRecyclerView();
 
-        wordFragment_recycler_id.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            /**
-             * Callback method to be invoked when the RecyclerView has been scrolled. This will be
-             * called after the scroll has completed.
-             * <p>
-             * This callback will also be called if visible item range changes after a layout
-             * calculation. In that case, dx and dy will be 0.
-             *
-             * @param recyclerView The RecyclerView which scrolled.
-             * @param dx           The amount of horizontal scroll.
-             * @param dy           The amount of vertical scroll.
-             */
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if(snackbar != null) {
-                    snackbar.dismiss();
-                    //TODO: the data is not being deleted from the database sometimes, even though
-                    // the method below is executing
-                    dataSource.removeItemById(clickedItemId, ItemTables.TABLE_NAME, ItemTables.COLUMN_ID);
-                }
-
-            }
-        });
+//        wordFragment_recycler_id.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            /**
+//             * Callback method to be invoked when the RecyclerView has been scrolled. This will be
+//             * called after the scroll has completed.
+//             * <p>
+//             * This callback will also be called if visible item range changes after a layout
+//             * calculation. In that case, dx and dy will be 0.
+//             *
+//             * @param recyclerView The RecyclerView which scrolled.
+//             * @param dx           The amount of horizontal scroll.
+//             * @param dy           The amount of vertical scroll.
+//             */
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                if(snackbar != null) {
+//                    snackbar.dismiss();
+//                    TODO: the data is not being deleted from the database sometimes, even though
+//                     the method below is executing
+//                    dataSource.removeItemById(clickedItemId, ItemTables.TABLE_NAME, ItemTables.COLUMN_ID);
+//                }
+//
+//            }
+//        });
 
 
         recyclerViewAdapter.setRecyclerViewItemsClickLongClickListener(new RecyclerViewItemsClickLongClickListener() {
@@ -266,7 +277,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
         animationsUtil = new AnimationsUtil(getContext());
         preferenceUtil = new PreferenceUtil(getContext());
 //        longClickBottomSheet = new LongClickBottomSheet();
-        deleteConfirmation = new DeleteConfirmation();
+        deleteConfirmation = new DeleteConfirmationBottomSheet();
         deleteConfirmation.setTargetFragment(this, 5);
 
 //        customDialogFragment = new CustomDialogFragment();
@@ -281,22 +292,55 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 //        recyclerViewAdapter.notifyItemChanged(clickedItemPosition);
         recyclerViewAdapter.notifyItemRemoved(clickedItemPosition);
         recyclerViewAdapter.notifyItemRangeChanged(clickedItemPosition, 2);
-        savedWords.remove(clickedItemPosition);
+        items.remove(clickedItemPosition);
         // TODO: deleted word is removed from the list, but only when the dialog is initialized
         // from this fragment, if its from cached words fragment, it still exists
 //        words.remove(longClickedObject.getWord());
 //        itemsToDelete.add(clickedItemId);
         checkIfDataExists();
+        itemsToDelete.add(clickedItemPosition);
+        numberOfDeletedItems++;
+        String msg, command;
+        if(numberOfDeletedItems == 1) {
+            msg = numberOfDeletedItems + " item deleted";
+            command = "UNDO";
+        } else {
+            msg = numberOfDeletedItems + " items deleted";
+            command = "SHOW";
+        }
 
-        customizedSnackBar("Deleted", Snackbar.LENGTH_INDEFINITE).setAction("UNDO", new View.OnClickListener() {
+        customizedSnackBar(msg, Snackbar.LENGTH_INDEFINITE).setAction(command, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performUndo();
+                if(numberOfDeletedItems == 1) {
+                    performUndo();
+                } else {
+                    showDeletedItems(itemsToDelete);
+                }
             }
 
         }).show();
 
         }
+
+    private void showDeletedItems(List<Integer> itemsToDelete) {
+
+        ArrayList<String> deletedWords = new ArrayList<>();
+        for (int i = 0; i < itemsToDelete.size(); i++) {
+            Log.i("restoration size", itemsToDelete.size() + " " + originalItems.size());
+//            if(items.get(itemsToDelete.get(i)) instanceof SavedWord) {
+                SavedWord savedWord = (SavedWord) originalItems.get(i);
+                String word = savedWord.getWord();
+                deletedWords.add(word);
+                Log.i("The word is ", word);
+//            }
+        }
+
+        DeletedItemsBottomSheet deletedItemsBottomSheet = new DeletedItemsBottomSheet().newInstance(deletedWords);
+        assert getFragmentManager() != null;
+        deletedItemsBottomSheet.show(getFragmentManager(), "deleted items");
+
+    }
 
     private void performUndo(){
 
@@ -326,7 +370,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 
         SavedWord savedWord;
         if(object instanceof SavedWord) {
-            savedWord = (SavedWord) savedWords.get(adapterPosition);
+            savedWord = (SavedWord) items.get(adapterPosition);
         }else {
             WordsViewType wordsViewType = (WordsViewType) object;
             savedWord = wordsViewType.getSavedWord();
@@ -381,7 +425,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 //        assert getContext() != null;
 //        Dialog dialog = new Dialog(getContext());
 //        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.show_word);
+//        dialog.setContentView(R.layout.dialog_show_word);
 //
 //        Toast.makeText(getActivity(), "Reached", Toast.LENGTH_SHORT).show();
 //
@@ -443,9 +487,9 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 
         wordFragment_recycler_id.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
-//        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), savedWords,
+//        recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), items,
 //                sortSelectedPosition);
-        recyclerViewAdapter = new RecyclerViewAdapter(savedWords);
+        recyclerViewAdapter = new RecyclerViewAdapter(items);
         wordFragment_recycler_id.setItemAnimator(new RecyclerItemAnimator());
 //        wordFragment_recycler_id.setLayoutManager(new StaggeredGridLayoutManager(2,
 //                StaggeredGridLayoutManager.VERTICAL));
@@ -479,8 +523,8 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-//        ArrayList<Object> savedWords = dataSource.savedWords(ItemTables.TABLE_NAME, 1);
-//        recyclerViewAdapter = new RecyclerViewAdapter(savedWords);
+//        ArrayList<Object> items = dataSource.items(ItemTables.TABLE_NAME, 1);
+//        recyclerViewAdapter = new RecyclerViewAdapter(items);
         inflater.inflate(R.menu.main, menu);
         SearchManager searchManager = (SearchManager) getContext().getSystemService(Context
                 .SEARCH_SERVICE);
@@ -521,7 +565,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
     }
 
     public boolean checkConditions(SavedWord savedWord, int position, boolean isDeleted, String
-            cachedWord, boolean isCheckBoxChecked, boolean isEdited, int sortPreference) {
+            cachedWord, boolean isCheckBoxChecked, boolean editing, int sortPreference) {
 
         // TODO: the insertion doesn't consider the fact that I might be using the alphabetical
         // order, that's why it is not notifying the adapter to make a change whenever I add or
@@ -529,87 +573,166 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
         dataSource.open();
         long id = -1;
 
-        if(!isEdited) {
+        int totalWords = items.size();
 
+        if(saving(editing)) {
             id = dataSource.insertData(dataSource.checkIfExists(savedWord), dataSource.checkEmpty
-                            (savedWord), dataSource.checkNumber(savedWord), savedWord, position, isDeleted);
+                    (savedWord), dataSource.checkNumber(savedWord), savedWord, position);
 
-            if(id != -1){
-                if(cachedWord != null){
-                    if(isCheckBoxChecked){
-                        dataSource.removeItemByName(cachedWord, ItemTables.TEMP_WORDS_TABLE, ItemTables.TEMP_COLUMN_WORD);
-                    }
-
-                }else {
-                    if (isDeleted) {
-                        Snackbar.make(coordinatorLayout_word_fragment, "RESTORED", Snackbar.LENGTH_LONG).show();
+            if(saved(id)) {
+                Log.i("Path to saving", "saved");
+                savedWord = (SavedWord) dataSource.getSingleData(id, ItemTables.TABLE_NAME);
+                if(alphabetically(sortPreference)) {
+                    Log.i("Path to saving", "saved alphabetically");
+                    if(cachedBefore(cachedWord)) {
+                        if(firstSaved(totalWords)) {
+                            WordsViewType wordsViewType = new WordsViewType("Recently Added");
+                            items.add(0, wordsViewType);
+                        } else {
+                            WordsViewType wordsViewType = (WordsViewType) items.get(0);
+                            if(!wordsViewType.getHeader().equals("Recently Added")) {
+                                WordsViewType wordsViewType1 = new WordsViewType("Recently Added");
+                                items.add(0, wordsViewType1);
+                                recyclerViewAdapter.notifyItemInserted(0);
+                            }
+                        }
+                        if(isCheckBoxChecked) {
+                            dataSource.removeItemByName(cachedWord, ItemTables.TEMP_WORDS_TABLE, ItemTables.TEMP_COLUMN_WORD);
+                        }
                     } else {
-                        savedWord = (SavedWord) dataSource.getSingleData(id, ItemTables.TABLE_NAME);
-//                        recyclerViewAdapter.notifyItemRangeChanged(position, 3);
-//                        wordFragment_recycler_id.smoothScrollToPosition(0);
-                        checkIfDataExists();
-                        fab_setting.setEnabled(true);
-
-                    }
-                }
-
-                // TODO: sometimes it doesn't show the Recently Added tag, but the first letter
-                // of the word
-                /* TODO: the words under the recently added header disperses when another
-                 activity is opened, the solution might be
-                    - to bundle the words and take them to the destination activity
-                    - then when the user gets back to this class, the class will check of hte
-                    words existence and displays them as they should be under the recently added
-                    header
-                */
-
-                if(sortPreference == 0) {
-                    if(savedWords.size() == 0) {
-                        WordsViewType wordsViewType = new WordsViewType("Recently Added");
-                        savedWords.add(0, wordsViewType);
-//                        savedWords.add(1, wordsViewType1);
-                    }else {
-                        WordsViewType wordsViewType = (WordsViewType) savedWords.get(0);
-                        if(!wordsViewType.getFirstLetter().equals("Recently Added")) {
-                            WordsViewType wordsViewType1 = new WordsViewType("Recently Added");
-                            savedWords.add(0, wordsViewType1);
-                            recyclerViewAdapter.notifyItemInserted(0);
-
+                        if(firstSaved(totalWords)) {
+                            WordsViewType wordsViewType = new WordsViewType("Recently Added");
+                            items.add(0, wordsViewType);
+                        } else {
+                            WordsViewType wordsViewType = (WordsViewType) items.get(0);
+                            if(!wordsViewType.getHeader().equals("Recently Added")) {
+                                WordsViewType wordsViewType1 = new WordsViewType("Recently Added");
+                                items.add(0, wordsViewType1);
+                                recyclerViewAdapter.notifyItemInserted(0);
+                            }
                         }
                     }
-//                }else {
-                    savedWords.add(1, savedWord);
+                    items.add(1, savedWord);
                     recyclerViewAdapter.notifyItemInserted(1);
+
                 } else {
-                    savedWords.add(0, savedWord);
-//                    updateList(savedWords);
+                    items.add(0, savedWord);
+//                    updateList(items);
                     recyclerViewAdapter.notifyItemInserted(0);
                 }
-
-            }else {
-
-                Toast.makeText(getContext(), "Couldn't be saved.", Toast.LENGTH_SHORT).show();
-
+            } else {
+                Toast.makeText(getContext(), "Sorry, couldn't save. Try Again Later", Toast.LENGTH_SHORT).show();
             }
-
         } else {
-
-            // TODO: unable to notify the adapter of the change happening when the words are
-            // sorted alphabetically
-            dataSource.updateItem(savedWord);
-            savedWords.set(clickedItemPosition, savedWord);
-//            recyclerViewAdapter.insertData(savedWords);
-//            Toast.makeText(getContext(), "Editing", Toast.LENGTH_SHORT).show();
-            recyclerViewAdapter.notifyDataSetChanged();
-//            recyclerViewAdapter.notifyItemRemoved(clickedItemPosition);
-//            recyclerViewAdapter.notifyItemInserted(clickedItemPosition);
-//            recyclerViewAdapter.getObjectList().set(pos+ition, savedWord);
-//            recyclerViewAdapter.notifyItemRangeChanged(position-1, 3);
-//            recyclerViewAdapter.notifyItemChanged(position);
+                dataSource.updateItem(savedWord);
+                items.set(clickedItemPosition, savedWord);
+                recyclerViewAdapter.notifyDataSetChanged();
+//            }
         }
+        checkIfDataExists();
+        fab_setting.setEnabled(true);
 
+//        if(!editing) { // if saving
+//
+//            id = dataSource.insertData(dataSource.checkIfExists(savedWord), dataSource.checkEmpty
+//                            (savedWord), dataSource.checkNumber(savedWord), savedWord, position);
+//
+//            if(saved(id)){
+//                if(cachedBefore(cachedWord)){
+//                    if(isCheckBoxChecked){
+//                        dataSource.removeItemByName(cachedWord, ItemTables.TEMP_WORDS_TABLE, ItemTables.TEMP_COLUMN_WORD);
+//                    }
+//
+//                }else {
+//                    if (isDeleted) {
+//                        Snackbar.make(coordinatorLayout_word_fragment, "RESTORED", Snackbar.LENGTH_LONG).show();
+//                    } else {
+//                        savedWord = (SavedWord) dataSource.getSingleData(id, ItemTables.TABLE_NAME);
+////                        recyclerViewAdapter.notifyItemRangeChanged(position, 3);
+////                        wordFragment_recycler_id.smoothScrollToPosition(0);
+//                        checkIfDataExists();
+//                        fab_setting.setEnabled(true);
+//
+//                    }
+//                }
+//
+//                // TODO: sometimes it doesn't show the Recently Added tag, but the first letter
+//                // of the word
+//                /* TODO: the words under the recently added header disperses when another
+//                 activity is opened, the solution might be
+//                    - to bundle the words and take them to the destination activity
+//                    - then when the user gets back to this class, the class will check of hte
+//                    words existence and displays them as they should be under the recently added
+//                    header
+//                */
+//
+//                if(sortPreference == 0) {
+//                    if(items.size() == 0) {
+//                        WordsViewType wordsViewType = new WordsViewType("Recently Added");
+//                        items.add(0, wordsViewType);
+////                        items.add(1, wordsViewType1);
+//                    }else {
+//                        WordsViewType wordsViewType = (WordsViewType) items.get(0);
+//                        if(!wordsViewType.getHeader().equals("Recently Added")) {
+//                            WordsViewType wordsViewType1 = new WordsViewType("Recently Added");
+//                            items.add(0, wordsViewType1);
+//                            recyclerViewAdapter.notifyItemInserted(0);
+//
+//                        }
+//                    }
+////                }else {
+//                    items.add(1, savedWord);
+//                    recyclerViewAdapter.notifyItemInserted(1);
+//                } else {
+//                    items.add(0, savedWord);
+////                    updateList(items);
+//                    recyclerViewAdapter.notifyItemInserted(0);
+//                }
+//
+//            }else {
+//
+//                Toast.makeText(getContext(), "Couldn't be saved.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//        } else {
+//
+//            // TODO: unable to notify the adapter of the change happening when the words are
+//            // sorted alphabetically
+//            dataSource.updateItem(savedWord);
+//            items.set(clickedItemPosition, savedWord);
+////            recyclerViewAdapter.insertData(items);
+////            Toast.makeText(getContext(), "Editing", Toast.LENGTH_SHORT).show();
+//            recyclerViewAdapter.notifyDataSetChanged();
+////            recyclerViewAdapter.notifyItemRemoved(clickedItemPosition);
+////            recyclerViewAdapter.notifyItemInserted(clickedItemPosition);
+////            recyclerViewAdapter.getObjectList().set(pos+ition, savedWord);
+////            recyclerViewAdapter.notifyItemRangeChanged(position-1, 3);
+////            recyclerViewAdapter.notifyItemChanged(position);
+//        }
+
+        return saved(id);
+
+    }
+
+    private boolean saving(boolean editing) {
+        return !editing;
+    }
+
+    private boolean firstSaved(int totalWords) {
+        return totalWords == 0;
+    }
+
+    private boolean alphabetically(int sortPreference) {
+        return sortPreference == 0;
+    }
+
+    private boolean saved(long id) {
         return id != -1;
+    }
 
+    private boolean cachedBefore(String cachedWord) {
+        return cachedWord != null;
     }
 
     // TODO: not fast in updating the adapter and also creates some item duplications
@@ -624,6 +747,7 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 
     }
 
+//    private boolean saving()
     public void dismissWhenScroll(){
         if(wordFragment_recycler_id.isInTouchMode()) {
             deleteConfirmation.dismiss();
@@ -665,17 +789,26 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 
     @Override
     public void onEditClicked() {
-        MeaningParsedDialogFragment meaningParsedDialogFragment = new MeaningParsedDialogFragment
+        SearchDialogFragment searchDialogFragment = new SearchDialogFragment
                 ().newInstance(longClickedObject.getWord(), clickedItemPosition, null, true, clickedItemId);
-        meaningParsedDialogFragment.show(getActivity().getSupportFragmentManager(),
+        searchDialogFragment.show(getActivity().getSupportFragmentManager(),
                 "word_fragment");
 //        Toast.makeText(getActivity(), "Edit Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRelatedWordsClicked() {
+
+        RelatedWordsBottomSheet relatedWordsBottomSheet = new RelatedWordsBottomSheet()
+                .newInstance(longClickedObject.getWord().toLowerCase());
+        relatedWordsBottomSheet.setTargetFragment(this, 6);
+        assert getFragmentManager() != null;
+        relatedWordsBottomSheet.show(getFragmentManager(), "related words fragment");
+
         Toast.makeText(getActivity(), "Related Words Clicked", Toast.LENGTH_SHORT).show();
     }
+
+
 
     /**
      * Called when a view has been clicked.
@@ -686,6 +819,9 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.fab_options:
+                searchDialogFragment = new SearchDialogFragment().newInstance(null, 0, words, false, -1);
+                assert getFragmentManager() != null;
+                searchDialogFragment.show(getFragmentManager(), "word_fragment");
 //                if(clickedFab == 0) {
 //                    showFabChangeImage(true, R.drawable.delete_48px_light_grey);
 //                    clickedFab = 1;
@@ -694,13 +830,11 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
 //                    clickedFab = 0;
 //                }
                 break;
-            case R.id.fab_add:
-                meaningParsedDialogFragment = new MeaningParsedDialogFragment().newInstance(null, 0, words, false, -1);
-                assert getFragmentManager() != null;
-                meaningParsedDialogFragment.show(getFragmentManager(), "word_fragment");
-                switchFAB(false);
-                showFabChangeImage(false, R.drawable.ic_settings_black_24dp);
-                break;
+//            case R.id.fab_add:
+
+//                switchFAB(false);
+//                showFabChangeImage(false, R.drawable.ic_settings_black_24dp);
+//                break;
         }
     }
 
@@ -785,5 +919,66 @@ public class WordsFragment extends Fragment implements LongClickBottomSheet
     @Override
     public void onNoClidked() {
         deleteConfirmation.dismiss();
+    }
+
+    // the four methods below are for find related words
+    @Override
+    public void onAssociationClicked() {
+        Intent intent = new Intent(getActivity(), RelatedWordsActivity.class);
+        intent.putExtra("association", longClickedObject.getWord());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRhymeClicked() {
+        Intent intent = new Intent(getActivity(), RelatedWordsActivity.class);
+        intent.putExtra("rhyme", longClickedObject.getWord());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSoundClicked() {
+
+        Intent intent = new Intent(getActivity(), RelatedWordsActivity.class);
+        intent.putExtra("sound", longClickedObject.getWord());
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onSpellClicked() {
+        Intent intent = new Intent(getActivity(), RelatedWordsActivity.class);
+        intent.putExtra("spell", longClickedObject.getWord());
+        startActivity(intent);
+    }
+
+    // returns a datatmuseapi object that contains the basic request
+    public DataMuseApi dataMuseApi(){
+        GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.datamuse.com/")
+                .addConverterFactory(gsonConverterFactory).build();
+        return retrofit.create(DataMuseApi.class);
+    }
+
+    public void searchForSoundingWords(){
+        DataMuseApi dataMuseApi = dataMuseApi();
+        Call<List<RelatedWords>> call = dataMuseApi.call(longClickedObject.getWord());
+        call.enqueue(new Callback<List<RelatedWords>>() {
+            @Override
+            public void onResponse(Call<List<RelatedWords>> call, Response<List<RelatedWords>> response) {
+                if(response.isSuccessful()) {
+                    for (RelatedWords relatedWords : response.body()) {
+                        Log.i("Spell like", relatedWords.getWord());
+                    }
+                    return;
+                }
+                Log.i("Spell likeee", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<List<RelatedWords>> call, Throwable t) {
+                Log.i("Spell likee", t.getMessage());
+            }
+        });
     }
 }
